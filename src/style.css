@@ -1,0 +1,160 @@
+:root {
+  --color_card: #318335;
+  --color_text_card: white;
+  --color_button: #2e7d32;
+  --color_text_button: white;
+  --color_box: #2e7d32;
+  --color_button_closed: black;
+  --color_header: #2e7d32;
+  --color_input: #2e7d32;
+  --color_tooltip: #d4cece;
+}
+
+/* Ocultar scrollbar */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* Clases utilitarias */
+.style-btn {
+  background-color: var(--color_button) !important;
+  color: var(--color_text_button) !important;
+}
+
+.style-text {
+  text-transform: capitalize;
+}
+
+.style-select {
+  border: 1px solid var(--color_input);
+  outline: none;
+}
+
+/* Tablas con header sticky */
+.my-sticky-header-table {
+  height: 60vh;
+}
+
+.my-sticky-header-table .q-table__top,
+.my-sticky-header-table .q-table__bottom,
+.my-sticky-header-table thead tr:first-child th {
+  background-color: #fff;
+}
+
+.my-sticky-header-table thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+
+.my-sticky-header-table thead tr:first-child th {
+  top: 0;
+}
+
+.my-sticky-header-table2 {
+  height: 70vh;
+}
+
+.my-sticky-header-table2 .q-table__top,
+.my-sticky-header-table2 .q-table__bottom,
+.my-sticky-header-table2 thead tr:first-child th {
+  background-color: #fff;
+}
+
+.my-sticky-header-table2 thead tr th {
+  position: sticky;
+  z-index: 1;
+}
+
+.my-sticky-header-table2 thead tr:first-child th {
+  top: 0;
+}
+
+.table-reactive {
+  height: 1000px;
+}
+
+/* Títulos de reportes */
+.titleReport {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+/* Tooltips personalizados */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.open-tooltip {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color_box);
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.content-tooltip {
+  visibility: hidden;
+  width: 250px;
+  background-color: var(--color_tooltip);
+  color: #333;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  border: 2px solid var(--color_box);
+}
+
+.content-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--color_box) transparent transparent transparent;
+}
+
+.h-tooltip {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--color_box);
+}
+
+.p-tooltip {
+  font-size: 12px;
+  margin: 0;
+  text-align: left;
+}
+
+.tooltip:hover .content-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Texto con elipsis */
+.customEvents {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}

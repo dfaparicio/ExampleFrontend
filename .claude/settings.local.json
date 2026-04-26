@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\USUARIO\\Desktop\\repforaFront\\src\\layouts",
+      "c:\\Users\\USUARIO\\Desktop\\repforaFront\\src\\views"
+    ]
+  }
+}
