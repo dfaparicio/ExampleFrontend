@@ -14,19 +14,13 @@
 
     <!-- Contenedor centrado del formulario -->
     <div class="login-body">
-      <div class="login-container">
-        <q-card class="login-card">
-          <!-- Paso 1: Ingresar email -->
+      <div class="login-content-wrapper">
+        <div class="login-container">
+          <q-card class="login-card">
+          <!-- Paso 1: Confirmar email -->
           <template v-if="step === 1">
-
-
-            <!-- Header del card con avatar y título -->
             <div class="login-card-header">
-              <!-- <div class="login-avatar">
-                <q-icon name="account_circle" size="48px" />
-              </div> -->
               <h2 class="login-title">REPFORA COMPLEMENTARIAS</h2>
-              <!-- <p class="login-subtitle">Ingresa tu correo para continuar</p> -->
             </div>
 
             <div class="login-card-header2">
@@ -40,18 +34,21 @@
 
             <q-separator color="grey-3" style="height: 1px;" />
 
-            <!-- Formulario de email -->
             <div class="login-card-body">
               <q-form @submit.prevent="step = 2" class="login-form">
-                <q-input v-model="email" type="email" label="Correo Electrónico" outlined dense color="green-9" class="email-input" />
-                <q-btn type="submit" class="login-btn style-btn" label="Enviar código" unelevated no-caps />
+                <div class="text-center q-mb-md">
+                  <p class="text-grey-8 text-weight-medium">¿Confirma el envío del código a este correo?</p>
+                  <div class="email-display q-pa-sm bg-grey-2 rounded-borders text-green-9 text-weight-bold">
+                    {{ email }}
+                  </div>
+                </div>
+                <q-btn type="submit" class="login-btn style-btn" label="Sí, enviar código" unelevated no-caps />
               </q-form>
             </div>
           </template>
 
           <!-- Paso 2: Verificar código -->
           <template v-else-if="step === 2">
-            <!-- Header del card con avatar y título -->
             <div class="login-card-header">
               <h2 class="login-title">REPFORA COMPLEMENTARIAS</h2>
             </div>
@@ -67,7 +64,6 @@
 
             <q-separator color="grey-3" style="height: 1px;" />
 
-            <!-- Formulario de verificación -->
             <div class="login-card-body">
               <q-form @submit.prevent="router.push('/register')" class="login-form">
                 <div class="code-inputs">
@@ -87,11 +83,11 @@
           </template>
         </q-card>
 
-        <!-- Indicador de seguridad -->
         <div class="login-secure">
           <q-icon name="lock" size="18px" />
           <span>Acceso seguro y encriptado</span>
         </div>
+      </div>
       </div>
     </div>
 
@@ -111,7 +107,7 @@ import LogoBlanco from '../assets/LogoBlanco.png'
 import Logo from '../assets/Logo.png'
 
 const router = useRouter()
-const email = ref('')
+const email = ref('usuario@sena.edu.co')
 const step = ref(1)
 const codeDigits = ref(['', '', '', '', '', ''])
 
@@ -134,16 +130,15 @@ function onDigitKeydown(event, index) {
 <style scoped>
 .home-header {
   background-color: var(--color_header);
-  padding: 10px 0 10px 0;
+  padding: 10px 0;
 }
 
 .home-logo {
-  height: 45px;
+  height: clamp(35px, 5vh, 55px);
 }
 
-/* ── Botón de atrás debajo del escudo ── */
 .back-button-container {
-  padding: 16px 24px 0;
+  padding: 16px clamp(16px, 3vw, 24px) 0;
 }
 
 .login-body {
@@ -151,12 +146,26 @@ function onDigitKeydown(event, index) {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 10px;
+  flex: 1;
+  padding: 0;
+  overflow: hidden;
+}
+
+.login-content-wrapper {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px clamp(8px, 1.5vw, 15px);
+  overflow-y: auto;
 }
 
 .login-container {
   width: 100%;
-  max-width: 440px;
+  max-width: 380px;
+  flex-shrink: 0;
 }
 
 .login-card {
@@ -167,7 +176,7 @@ function onDigitKeydown(event, index) {
   background-color: var(--color_header);
   color: var(--color_text_card);
   text-align: center;
-  padding: 20px 20px;
+  padding: clamp(15px, 3vw, 25px) clamp(15px, 3vw, 25px);
 }
 
 .login-card-header2 {
@@ -175,73 +184,49 @@ function onDigitKeydown(event, index) {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 30px 0 30px 0;
-  gap: 30px;
+  padding: clamp(10px, 2vh, 25px);
+  gap: clamp(8px, 1.5vw, 18px);
 }
 
 .login-card-header2 img {
-  height: 120px;
+  height: clamp(45px, 9vh, 90px);
+  width: auto;
 }
 
 .login-title2 h4 {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: clamp(1.3rem, 3vw, 2rem);
   font-weight: 700;
   text-align: center;
 }
 
-.login-avatar {
-  width: 72px;
-  height: 72px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-}
-
-.login-avatar .q-icon {
-  font-size: 48px;
-  color: white;
-}
-
 .login-title {
-  font-size: 24px;
+  font-size: clamp(18px, 2.5vw, 28px);
   font-weight: 700;
   margin: 0;
   color: white;
   line-height: 1.2;
 }
 
-.login-subtitle {
-  font-size: 16px;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.9);
-}
-
 .login-card-body {
-  padding: 24px;
-}
-
-.login-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color_button_closed);
-  text-transform: uppercase;
-  margin-bottom: 8px;
+  padding: clamp(22px, 2.5vw, 22px);
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: clamp(10px, 1.5vw, 16px);
+}
+
+.email-display {
+  border: 1px solid #e0e0e0;
+  font-size: 1.1rem;
 }
 
 .login-btn {
   width: 100%;
-  height: 40px;
-  font-size: 1rem;
+  height: clamp(34px, 4vh, 42px);
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
   font-weight: 600;
   border-radius: 8px;
   background-color: var(--color_button);
@@ -250,15 +235,15 @@ function onDigitKeydown(event, index) {
 
 .login-btn-secondary {
   width: 100%;
-  height: 40px;
-  font-size: 1rem;
+  height: clamp(36px, 5vh, 44px);
+  font-size: clamp(0.85rem, 2vw, 1rem);
   font-weight: 600;
   border-radius: 8px;
 }
 
 .login-buttons-secondary {
   display: flex;
-  gap: 12px;
+  gap: clamp(8px, 2vw, 16px);
 }
 
 .login-buttons-secondary .login-btn-secondary {
@@ -268,21 +253,24 @@ function onDigitKeydown(event, index) {
 .code-inputs {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin: 8px 0 16px 0;
+  gap: clamp(6px, 1.5vw, 12px);
+  margin: 8px 0 clamp(12px, 2vw, 20px) 0;
+  padding: 0 clamp(4px, 1vw, 10px);
 }
 
 .code-digit {
-  width: 48px;
-  height: 56px;
-  font-size: 24px;
+  width: clamp(32px, 6.5vw, 48px);
+  height: clamp(40px, 9vh, 56px);
+  font-size: clamp(16px, 3.5vw, 24px);
   font-weight: 600;
   text-align: center;
   border: 2px solid #e0e0e0;
-  border-radius: 12px;
+  border-radius: clamp(8px, 2vw, 12px);
   outline: none;
   transition: all 0.2s ease;
   color: var(--color_button_closed);
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .code-digit:focus {
@@ -294,37 +282,42 @@ function onDigitKeydown(event, index) {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 30px;
+  gap: 6px;
+  margin-top: clamp(15px, 2vw, 25px);
   color: var(--color_button_closed);
   opacity: 0.8;
-  font-size: 0.875rem;
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
   font-weight: 500;
-}
-
-.login-secure .q-icon {
-  font-size: 18px;
 }
 
 .home-footer {
   background-color: var(--color_tooltip);
-  padding: 12px 0;
-  height: 50px;
+  padding: clamp(6px, 0.8vh, 10px) 0;
+  height: clamp(35px, 5vh, 45px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .home-footer-text {
   text-align: center;
-  font-size: 1rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
   font-weight: 600;
   color: var(--color_button_closed);
 }
 
-.email-input :deep(.q-field__control) {
-  height: 50px;
+@media (max-width: 768px) {
+  .login-container {
+    max-width: 90%;
+  }
 }
 
-.email-input :deep(.q-field__label) {
-  font-size: 16px;
-  padding: 5px 0 0 0 ;
+@media (max-width: 480px) {
+  .login-buttons-secondary {
+    flex-direction: column;
+  }
+  .login-buttons-secondary .login-btn-secondary {
+    width: 100%;
+  }
 }
 </style>

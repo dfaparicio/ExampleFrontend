@@ -1,17 +1,12 @@
 <template>
-  <q-page>
+  <q-page class="q-page">
     <!-- Barra de búsqueda -->
     <div class="search-wrapper">
       <div class="search-bar">
         <div class="search-section">
-          <q-icon name="search" class="section-icon" />
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Buscar por nombre del programa, área o código..."
-            class="search-input"
-            @input="onSearch"
-          />
+          <q-icon name="emoji_objects" class="section-icon" />
+          <input v-model="searchQuery" type="text" placeholder="Buscar por nombre del programa, área o código..."
+            class="search-input" />
         </div>
         <button class="search-btn" @click="onSearch">
           <q-icon name="search" class="search-btn-icon" />
@@ -19,9 +14,8 @@
       </div>
     </div>
 
-    <!-- Layout principal -->
+    <!-- Layout: Sidebar + Resultados -->
     <div class="main-layout">
-      <!-- Sidebar de filtros -->
       <div class="sidebar-container">
         <q-card flat bordered class="filter-section">
           <q-card-section class="bg-green-9 q-py-md">
@@ -31,29 +25,18 @@
           </q-card-section>
 
           <q-card-section class="q-pa-md">
-            <!-- Modalidad -->
             <div class="filter-group q-mb-md">
-              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">
-                MODALIDAD
-              </div>
+              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">MODALIDAD</div>
               <q-list dense>
-                <q-item v-for="m in filters.modalidad" :key="m.value" class="q-pl-none">
+                <q-item v-for="m in modalidades" :key="m.value" class="q-pl-none">
                   <q-item-section avatar>
-                    <q-checkbox
-                      v-model="selected.modalidad"
-                      :val="m.value"
-                      color="green-9"
-                      dense
-                      @update:model-value="applyFilters"
-                    />
+                    <q-checkbox v-model="selected.modalidad" :val="m.value" color="green-9" dense />
                   </q-item-section>
                   <q-item-section>
                     <q-item-label>{{ m.label }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
-                    <q-badge
-                      :class="selected.modalidad.includes(m.value) ? 'bg-green-10 text-white' : 'bg-grey-4'"
-                    >
+                    <q-badge :class="selected.modalidad.includes(m.value) ? 'bg-green-10 text-white' : 'bg-grey-4'">
                       {{ m.count }}
                     </q-badge>
                   </q-item-section>
@@ -61,59 +44,18 @@
               </q-list>
             </div>
 
-            <!-- Nivel de formación -->
             <div class="filter-group q-mb-md">
-              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">
-                NIVEL DE FORMACIÓN
-              </div>
-              <q-list dense>
-                <q-item v-for="n in niveles" :key="n.value" class="q-pl-none">
-                  <q-item-section avatar>
-                    <q-checkbox
-                      v-model="selected.nivel"
-                      :val="n.value"
-                      color="green-9"
-                      dense
-                      @update:model-value="applyFilters"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>{{ n.label }}</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-badge
-                      :class="selected.nivel.includes(n.value) ? 'bg-green-10 text-white' : 'bg-grey-4'"
-                    >
-                      {{ n.count }}
-                    </q-badge>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </div>
-
-            <!-- Línea tecnológica -->
-            <div class="filter-group q-mb-md">
-              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">
-                LÍNEA TECNOLÓGICA
-              </div>
+              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">LÍNEA TECNOLÓGICA</div>
               <q-list dense>
                 <q-item v-for="l in lineas" :key="l.value" class="q-pl-none">
                   <q-item-section avatar>
-                    <q-checkbox
-                      v-model="selected.linea"
-                      :val="l.value"
-                      color="green-9"
-                      dense
-                      @update:model-value="applyFilters"
-                    />
+                    <q-checkbox v-model="selected.linea" :val="l.value" color="green-9" dense />
                   </q-item-section>
                   <q-item-section>
                     <q-item-label class="customEvents">{{ l.label }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
-                    <q-badge
-                      :class="selected.linea.includes(l.value) ? 'bg-green-10 text-white' : 'bg-grey-4'"
-                    >
+                    <q-badge :class="selected.linea.includes(l.value) ? 'bg-green-10 text-white' : 'bg-grey-4'">
                       {{ l.count }}
                     </q-badge>
                   </q-item-section>
@@ -121,29 +63,18 @@
               </q-list>
             </div>
 
-            <!-- Red de conocimiento -->
             <div class="filter-group q-mb-md">
-              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">
-                RED DE CONOCIMIENTO
-              </div>
+              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">RED DE CONOCIMIENTO</div>
               <q-list dense>
                 <q-item v-for="r in redes" :key="r.value" class="q-pl-none">
                   <q-item-section avatar>
-                    <q-checkbox
-                      v-model="selected.red"
-                      :val="r.value"
-                      color="green-9"
-                      dense
-                      @update:model-value="applyFilters"
-                    />
+                    <q-checkbox v-model="selected.red" :val="r.value" color="green-9" dense />
                   </q-item-section>
                   <q-item-section>
                     <q-item-label class="customEvents">{{ r.label }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
-                    <q-badge
-                      :class="selected.red.includes(r.value) ? 'bg-green-10 text-white' : 'bg-grey-4'"
-                    >
+                    <q-badge :class="selected.red.includes(r.value) ? 'bg-green-10 text-white' : 'bg-grey-4'">
                       {{ r.count }}
                     </q-badge>
                   </q-item-section>
@@ -151,29 +82,18 @@
               </q-list>
             </div>
 
-            <!-- Apuestas prioritarias -->
             <div class="filter-group q-mb-md">
-              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">
-                APUESTAS PRIORITARIAS
-              </div>
+              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">APUESTAS PRIORITARIAS</div>
               <q-list dense>
                 <q-item v-for="a in apuestas" :key="a.value" class="q-pl-none">
                   <q-item-section avatar>
-                    <q-checkbox
-                      v-model="selected.apuesta"
-                      :val="a.value"
-                      color="green-9"
-                      dense
-                      @update:model-value="applyFilters"
-                    />
+                    <q-checkbox v-model="selected.apuesta" :val="a.value" color="green-9" dense />
                   </q-item-section>
                   <q-item-section>
                     <q-item-label class="customEvents">{{ a.label }}</q-item-label>
                   </q-item-section>
                   <q-item-section side>
-                    <q-badge
-                      :class="selected.apuesta.includes(a.value) ? 'bg-green-10 text-white' : 'bg-grey-4'"
-                    >
+                    <q-badge :class="selected.apuesta.includes(a.value) ? 'bg-green-10 text-white' : 'bg-grey-4'">
                       {{ a.count }}
                     </q-badge>
                   </q-item-section>
@@ -181,102 +101,28 @@
               </q-list>
             </div>
 
-            <!-- Duración -->
             <div class="filter-group q-mb-md">
-              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">
-                DURACIÓN (HORAS)
-              </div>
+              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">DURACIÓN (HORAS)</div>
               <div class="row q-gutter-sm items-center">
                 <div class="col">
-                  <q-input
-                    outlined
-                    dense
-                    v-model.number="selected.durMin"
-                    type="number"
-                    label="Mín"
-                    color="green-9"
-                    min="0"
-                    @change="applyFilters"
-                  />
+                  <q-input outlined dense v-model.number="selected.durMin" type="number" label="Mín" color="green-9"
+                    min="0" />
                 </div>
                 <div class="text-grey-7 text-weight-bold">—</div>
                 <div class="col">
-                  <q-input
-                    outlined
-                    dense
-                    v-model.number="selected.durMax"
-                    type="number"
-                    label="Máx"
-                    color="green-9"
-                    min="0"
-                    @change="applyFilters"
-                  />
+                  <q-input outlined dense v-model.number="selected.durMax" type="number" label="Máx" color="green-9"
+                    min="0" />
                 </div>
               </div>
             </div>
-
-            <!-- FIC -->
-            <div class="filter-group q-mb-md">
-              <div class="text-green-9 text-weight-bold text-caption q-mb-sm">
-                APOYO FIC
-              </div>
-              <q-list dense>
-                <q-item class="q-pl-none">
-                  <q-item-section avatar>
-                    <q-checkbox
-                      v-model="selected.fic"
-                      val="SI"
-                      color="green-9"
-                      dense
-                      @update:model-value="applyFilters"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>Con apoyo FIC</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-badge :class="selected.fic.includes('SI') ? 'bg-green-10 text-white' : 'bg-grey-4'">
-                      {{ ficCount }}
-                    </q-badge>
-                  </q-item-section>
-                </q-item>
-                <q-item class="q-pl-none">
-                  <q-item-section avatar>
-                    <q-checkbox
-                      v-model="selected.fic"
-                      val="NO"
-                      color="green-9"
-                      dense
-                      @update:model-value="applyFilters"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>Sin apoyo FIC</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-badge :class="selected.fic.includes('NO') ? 'bg-green-10 text-white' : 'bg-grey-4'">
-                      {{ noFicCount }}
-                    </q-badge>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </div>
           </q-card-section>
 
-          <!-- Acciones -->
           <q-card-actions class="q-pa-md">
-            <q-btn
-              outline
-              color="green-9"
-              label="Limpiar"
-              @click="clearFilters"
-              class="full-width"
-            />
+            <q-btn outline color="green-9" label="Limpiar" @click="clearFilters" class="full-width" />
           </q-card-actions>
         </q-card>
       </div>
 
-      <!-- Resultados -->
       <div class="results-container">
         <q-card flat bordered>
           <q-card-section class="q-pa-md">
@@ -287,171 +133,242 @@
                   {{ filteredCourses.length }} programa(s) encontrado(s)
                 </div>
               </div>
-              <q-select
-                outlined
-                dense
-                v-model="sortBy"
-                :options="sortOptions"
-                label="Ordenar por"
-                color="green-9"
-                emit-value
-                map-options
-                style="min-width: 200px"
-                @update:model-value="applyFilters"
-              />
+              <q-select outlined dense v-model="sortBy" :options="sortOptions" label="Ordenar por" color="green-9"
+                emit-value map-options style="min-width: 200px" />
             </div>
 
-            <!-- Chips de filtros activos -->
             <div v-if="activeChips.length" class="q-mb-md">
-              <q-chip
-                v-for="chip in activeChips"
-                :key="chip.key + chip.value"
-                class="bg-green-10 text-white"
-                removable
-                @remove="removeChip(chip)"
-              >
+              <q-chip v-for="chip in activeChips" :key="chip.key + chip.value" class="bg-green-10 text-white" removable
+                @remove="removeChip(chip)">
                 {{ chip.label }}
               </q-chip>
             </div>
 
-            <!-- Lista de cursos -->
-            <div v-if="paginatedCourses.length">
-              <q-card
-                v-for="course in paginatedCourses"
-                :key="course.COD_VER"
-                flat
-                bordered
-                class="course-card q-mb-sm"
-                clickable
-                @click="goToCourse(course)"
-              >
-                <q-card-section class="q-pa-md">
-                  <div class="row justify-between items-center">
-                    <div class="col">
-                      <div class="row items-center q-gutter-sm q-mb-sm">
-                        <div class="text-subtitle1 text-weight-bold style-text course-title">
-                          {{ course.PRF_DENOMINACION }}
+            <div class="results-scroll-container">
+              <div v-if="loading" class="text-center q-pa-xl">
+                <q-spinner size="50px" color="green-9" />
+                <div class="text-h6 text-grey-6 q-mt-md">Cargando programas...</div>
+              </div>
+
+              <div v-else-if="paginatedCourses.length" class="courses-list">
+                <q-card v-for="course in paginatedCourses" :key="course.COD_VER" flat bordered
+                  class="course-card q-mb-sm">
+                  <q-card-section class="q-pa-md">
+                    <div class="row justify-between items-center">
+                      <div class="col">
+                        <div class="row items-center q-mb-sm">
+                          <div class="text-subtitle1 text-weight-bold course-title">
+                            {{ course.PRF_DENOMINACION || 'Sin nombre' }}
+                          </div>
+                          <span class="modalidad-badge q-ml-sm" :class="{ 'badge-presencial': course.MODALIDAD === 'Presencial', 'badge-virtual': course.MODALIDAD === 'Virtual', 'badge-mixto': course.MODALIDAD === 'Virtual/Presencial' }">
+                            {{ course.MODALIDAD || 'N/A' }}
+                          </span>
                         </div>
-                        <q-badge
-                          :class="[
-                            course.MODALIDAD === 'Presencial' ? 'bg-dark' :
-                            course.MODALIDAD === 'Virtual' ? 'bg-purple-9' : 'bg-blue-9'
-                          ]"
-                          class="text-white"
-                        >
-                          {{ course.MODALIDAD }}
-                        </q-badge>
+                        <div class="row q-gutter-md items-center text-body2 text-grey-7">
+                          <div class="flex items-center q-gutter-xs">
+                            <q-icon name="school" size="16px" color="green-9" />
+                            <span>{{ course.TIPO_DE_FORMACION || 'Sin nivel' }}</span>
+                          </div>
+                          <div class="text-grey-5">|</div>
+                          <div class="flex items-center q-gutter-xs">
+                            <q-icon name="analytics" size="16px" color="green-9" />
+                            <span>{{ course.PRF_DURACION_MAXIMA }} horas</span>
+                          </div>
+                          <div class="text-grey-5">|</div>
+                          <div class="flex items-center q-gutter-xs">
+                            <q-icon name="category" size="16px" color="green-9" />
+                            <span>{{ course.RED_DE_CONOCIMIENTO || 'Sin red' }}</span>
+                          </div>
+                        </div>
                       </div>
-                      <div class="row q-gutter-md items-center text-body2 text-grey-7">
-                        <div class="flex items-center q-gutter-xs">
-                          <q-icon name="schedule" size="16px" color="green-9" />
-                          <span>{{ course.PRF_DURACION_MAXIMA }} horas</span>
-                        </div>
-                        <div class="text-grey-5">|</div>
-                        <div class="flex items-center q-gutter-xs">
-                          <q-icon name="school" size="16px" color="green-9" />
-                          <span>{{ course.TIPO_DE_FORMACION }}</span>
-                        </div>
-                        <div class="text-grey-5">|</div>
-                        <div class="flex items-center q-gutter-xs">
-                          <q-icon name="workspace_premium" size="16px" color="green-9" />
-                          <span>{{ course.NIVEL_DE_FORMACION }}</span>
-                        </div>
-                        <q-badge class="bg-grey-4 text-grey-8">
-                          {{ course.PRF_EDAD_MIN_REQUERIDA ?? 14 }}+ Edad mínima
-                        </q-badge>
-                      </div>
-                      <div v-if="course.LINEA_TECNOLOGICA" class="text-caption text-grey-6 q-mt-xs customEvents">
-                        <q-icon name="label" size="14px" color="green-9" />
-                        {{ course.LINEA_TECNOLOGICA }} · {{ course.RED_DE_CONOCIMIENTO }}
-                      </div>
+                      <q-btn round color="green-9" size="md" icon="arrow_forward" @click="abrirModal(course)" />
                     </div>
-                    <q-icon
-                      name="arrow_forward"
-                      size="24px"
-                      color="green-9"
-                      class="course-arrow"
-                    />
-                  </div>
-                </q-card-section>
-              </q-card>
+                  </q-card-section>
+                </q-card>
+              </div>
+
+              <div v-else class="text-center q-pa-xl">
+                <q-icon name="search_off" size="64px" color="grey-4" />
+                <div class="text-h6 text-grey-6 q-mt-md">No se encontraron programas con los filtros seleccionados.</div>
+              </div>
             </div>
 
-            <!-- Sin resultados -->
-            <div v-else class="text-center q-pa-xl">
-              <q-icon name="search_off" size="64px" color="grey-4" />
-              <div class="text-h6 text-grey-6 q-mt-md">No se encontraron programas con los filtros seleccionados.</div>
-            </div>
-
-            <!-- Paginación -->
-            <div v-if="totalPages > 1" class="q-mt-lg flex justify-center">
-              <q-pagination
-                v-model="currentPage"
-                :max="totalPages"
-                :max-pages="5"
-                color="green-9"
-                active-color="green-9"
-                text-color="black"
-                active-text-color="white"
-                @update:model-value="goPage(currentPage)"
-              />
+            <div v-if="totalPages > 1" class="pagination-container q-mt-lg flex justify-center">
+              <q-pagination v-model="currentPage" :max="totalPages" :max-pages="5" color="green-9"
+                active-color="green-9" text-color="black" active-text-color="white" />
             </div>
           </q-card-section>
         </q-card>
       </div>
     </div>
+
+    <!-- Modal de detalles -->
+    <q-dialog v-model="showModal" persistent>
+      <q-card class="modal-card">
+        <q-card-section class="bg-green-9 text-white q-pa-md">
+          <div class="row items-center justify-between">
+            <div class="text-subtitle1 text-weight-bold">{{ selectedCourse?.PRF_DENOMINACION }}</div>
+            <q-btn flat round dense color="white" icon="close" @click="cerrarModal" />
+          </div>
+        </q-card-section>
+
+        <q-card-section class="modal-content">
+          <div class="column q-col-gutter-lg">
+            <div class="col-12 col-md-6">
+              <div class="info-section q-mb-lg">
+                <div class="text-subtitle2 text-green-9 text-weight-bold q-mb-md">Información General</div>
+                <div class="info-item q-mb-sm">
+                  <q-icon name="badge" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Código:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.COD_VER }}</span>
+                </div>
+                <div class="info-item q-mb-sm">
+                  <q-icon name="location_city" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Modalidad:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.MODALIDAD }}</span>
+                </div>
+                <div class="info-item q-mb-sm">
+                  <q-icon name="schedule" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Duración:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.PRF_DURACION_MAXIMA }} horas</span>
+                </div>
+                <div class="info-item q-mb-sm">
+                  <q-icon name="school" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Tipo de formación:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.TIPO_DE_FORMACION }}</span>
+                </div>
+                <div v-if="selectedCourse?.PRF_EDAD_MIN_REQUERIDA" class="info-item q-mb-sm">
+                  <q-icon name="person" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Edad mínima:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.PRF_EDAD_MIN_REQUERIDA }} años</span>
+                </div>
+              </div>
+
+              <div class="info-section q-mb-lg">
+                <div class="text-subtitle2 text-green-9 text-weight-bold q-mb-md">Clasificación</div>
+                <div class="info-item q-mb-sm">
+                  <q-icon name="category" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Línea tecnológica:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.LINEA_TECNOLOGICA }}</span>
+                </div>
+                <div class="info-item q-mb-sm">
+                  <q-icon name="hub" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Red tecnológica:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.RED_TECNOLOGICA }}</span>
+                </div>
+                <div class="info-item q-mb-sm">
+                  <q-icon name="science" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Red de conocimiento:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.RED_DE_CONOCIMIENTO }}</span>
+                </div>
+                <div class="info-item q-mb-sm">
+                  <q-icon name="star" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Apuesta prioritaria:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.APUESTAS_PRIORITARIAS }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <div v-if="selectedCourse?.PRF_DESCRIPCION_REQUISITO" class="info-section q-mb-lg">
+                <div class="text-subtitle2 text-green-9 text-weight-bold q-mb-md">Requisitos</div>
+                <div class="info-content text-body2 text-grey-7">
+                  {{ selectedCourse?.PRF_DESCRIPCION_REQUISITO }}
+                </div>
+              </div>
+
+              <div class="info-section q-mb-lg">
+                <div class="text-subtitle2 text-green-9 text-weight-bold q-mb-md">Información Adicional</div>
+                <div v-if="selectedCourse?.PRF_RESOLUCION" class="info-item q-mb-sm">
+                  <q-icon name="description" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Resolución:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.PRF_RESOLUCION }}</span>
+                </div>
+                <div v-if="selectedCourse?.PRF_FECHA_RESOLUCION" class="info-item q-mb-sm">
+                  <q-icon name="calendar_today" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Fecha resolución:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.PRF_FECHA_RESOLUCION }}</span>
+                </div>
+                <div v-if="selectedCourse?.PRF_FCH_REGISTRO" class="info-item q-mb-sm">
+                  <q-icon name="event" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Fecha registro:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.PRF_FCH_REGISTRO }}</span>
+                </div>
+                <div v-if="selectedCourse?.FECHA_ACTIVO_EN_EJECUCION" class="info-item q-mb-sm">
+                  <q-icon name="play_circle" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Inicio ejecución:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.FECHA_ACTIVO_EN_EJECUCION }}</span>
+                </div>
+                <div class="info-item q-mb-sm">
+                  <q-icon name="verified" color="green-9" class="q-mr-sm" />
+                  <span class="text-weight-bold">Apoyo FIC:</span>
+                  <span class="q-ml-sm">{{ selectedCourse?.FIC === 'SI' ? 'Sí' : 'No' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+
+        <q-card-actions class="bg-grey-2 q-pa-md q-gutter-sm">
+          <q-btn outline color="grey-7" label="Cerrar" class="col" @click="cerrarModal" />
+          <q-btn color="green-9" label="Seleccionar Programa" class="col-8" icon="check_circle" @click="seleccionarCurso" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <button class="scroll-to-top-btn" @click="scrollToTop" aria-label="Volver arriba">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4L12 20M12 4L5 11M12 4L19 11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Subir</span>
+    </button>
   </q-page>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted, defineEmits } from 'vue'
 
-// ──────────────────────────────────────────────
-// PROPS — pasa tus cursos desde el padre o reemplaza
-// los datos de ejemplo con el import del JSON real:
-//   import cursos from '@/data/complementarias_completo.json'
-// ──────────────────────────────────────────────
-const props = defineProps({
-  courses: {
-    type: Array,
-    default: () => [
-      { COD_VER: '03000089-1', PRF_DENOMINACION: 'ACABADOS PARA PIEZAS TEXTILES ARTESANALES', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 40, PRF_EDAD_MIN_REQUERIDA: 14, LINEA_TECNOLOGICA: 'DISEÑO', RED_TECNOLOGICA: 'DISEÑO DE MODAS Y CONFECCIONES', RED_DE_CONOCIMIENTO: 'Textil, Confección Diseño y Moda', APUESTAS_PRIORITARIAS: 'Economía popular', FIC: 'NO' },
-      { COD_VER: '02000072-3', PRF_DENOMINACION: 'ACCIONES DE PREVENCION EN SALUD MENTAL', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 40, PRF_EDAD_MIN_REQUERIDA: 14, LINEA_TECNOLOGICA: 'CLIENTE', RED_TECNOLOGICA: 'TECNOLOGÍAS DE SERVICIOS DE SALUD', RED_DE_CONOCIMIENTO: 'Logística Y Gestión De La Producción', APUESTAS_PRIORITARIAS: 'Apuesta del sector', FIC: 'NO' },
-      { COD_VER: '03000062-3', PRF_DENOMINACION: 'ACCIONES PARA LA CONSERVACION, PROTECCION Y RESTAURACION DE LOS SISTEMAS SOCIOECOLOGICOS', MODALIDAD: 'Virtual', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Complementaria virtual', PRF_DURACION_MAXIMA: 48, PRF_EDAD_MIN_REQUERIDA: 14, LINEA_TECNOLOGICA: 'PRODUCCIÓN Y TRANSFORMACIÓN', RED_TECNOLOGICA: 'TECNOLOGÍAS AGRÍCOLAS', RED_DE_CONOCIMIENTO: 'Agrícola', APUESTAS_PRIORITARIAS: 'Transición energética', FIC: 'NO' },
-      { COD_VER: '01000014-1', PRF_DENOMINACION: 'AUTOCAD CIVIL 3D', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 120, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'MATERIALES HERRAMIENTAS', RED_TECNOLOGICA: 'MATERIALES PARA LA CONSTRUCCIÓN', RED_DE_CONOCIMIENTO: 'Infraestructura', APUESTAS_PRIORITARIAS: 'Fortalecimiento en programas TIC', FIC: 'NO' },
-      { COD_VER: '02000016-1', PRF_DENOMINACION: 'GESTION DE SERVICIOS DE TECNOLOGIAS DE LA INFORMACION', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 200, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'TECNOLOGÍAS DE LA INFORMACIÓN Y LAS COMUNICACIONES GESTIÓN DE LA INFORMACIÓN', RED_TECNOLOGICA: 'TECNOLOGÍAS DE LA INFORMACIÓN, DISEÑO Y DESARROLLO DE SOFTWARE', RED_DE_CONOCIMIENTO: 'Informática, Diseño Y Desarrollo De Software', APUESTAS_PRIORITARIAS: 'Fortalecimiento en programas TIC', FIC: 'NO' },
-      { COD_VER: '02000058-1', PRF_DENOMINACION: 'MICROSOFT WORD AVANZADO', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 30, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'TECNOLOGÍAS DE LA INFORMACIÓN Y LAS COMUNICACIONES GESTIÓN DE LA INFORMACIÓN', RED_TECNOLOGICA: 'TECNOLOGÍAS DE LA INFORMACIÓN, DISEÑO Y DESARROLLO DE SOFTWARE', RED_DE_CONOCIMIENTO: 'Informática, Diseño Y Desarrollo De Software', APUESTAS_PRIORITARIAS: 'Fortalecimiento en programas TIC', FIC: 'NO' },
-      { COD_VER: '03000050-2', PRF_DENOMINACION: 'CATACION DE CAFE NIVEL 1', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 96, PRF_EDAD_MIN_REQUERIDA: 16, LINEA_TECNOLOGICA: 'PRODUCCIÓN Y TRANSFORMACIÓN', RED_TECNOLOGICA: 'TECNOLOGÍAS AGROINDUSTRIALES', RED_DE_CONOCIMIENTO: 'Agrícola', APUESTAS_PRIORITARIAS: 'Economía popular', FIC: 'NO' },
-      { COD_VER: '02000082-1', PRF_DENOMINACION: 'REVIT BASICO', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 40, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'MATERIALES HERRAMIENTAS', RED_TECNOLOGICA: 'MATERIALES PARA LA CONSTRUCCIÓN', RED_DE_CONOCIMIENTO: 'Construcción', APUESTAS_PRIORITARIAS: 'Fortalecimiento en programas TIC', FIC: 'NO' },
-      { COD_VER: '02000130-1', PRF_DENOMINACION: 'GESTION DE RESIDUOS DE APARATOS ELECTRICOS Y ELECTRONICOS', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 40, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'PRODUCCIÓN Y TRANSFORMACIÓN', RED_TECNOLOGICA: 'TECNOLOGÍAS DE MANTENIMIENTO PREDICTIVO, PREVENTIVO Y CORRECTIVO', RED_DE_CONOCIMIENTO: 'Electrónica Y Automatización', APUESTAS_PRIORITARIAS: 'Transición energética', FIC: 'NO' },
-      { COD_VER: '02110009-1', PRF_DENOMINACION: 'DIRECCION DE PROYECTOS BAJO EL ESTANDAR PMI', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 120, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'CLIENTE', RED_TECNOLOGICA: 'TECNOLOGÍAS DE GESTIÓN ADMINISTRATIVA Y SERVICIOS FINANCIEROS', RED_DE_CONOCIMIENTO: 'Gestión Administrativa Y Financiera', APUESTAS_PRIORITARIAS: 'Apuesta del sector', FIC: 'NO' },
-      { COD_VER: '02000118-1', PRF_DENOMINACION: 'ELABORACION DE ARTICULOS CIENTIFICOS EN ACTIVIDADES DE INVESTIGACION', MODALIDAD: 'Virtual', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Complementaria virtual', PRF_DURACION_MAXIMA: 120, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'CLIENTE', RED_TECNOLOGICA: 'TECNOLOGÍAS DE GESTIÓN ADMINISTRATIVA Y SERVICIOS FINANCIEROS', RED_DE_CONOCIMIENTO: 'Red Ins. de Pedagogía', APUESTAS_PRIORITARIAS: 'Apuesta del sector', FIC: 'NO' },
-      { COD_VER: '03000060-1', PRF_DENOMINACION: 'PRESTACION DE SERVICIOS HOTELEROS EN IDIOMA INGLES', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 420, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'CLIENTE', RED_TECNOLOGICA: 'TECNOLOGÍAS DE SERVICIOS TURÍSTICOS', RED_DE_CONOCIMIENTO: 'Hotelería Y Turismo', APUESTAS_PRIORITARIAS: 'Economía popular', FIC: 'NO' },
-      { COD_VER: '02000088-1', PRF_DENOMINACION: 'PROGRAMACION DE FIRMWARE EN DISPOSITIVOS ELECTRONICOS', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 40, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'PRODUCCIÓN Y TRANSFORMACIÓN', RED_TECNOLOGICA: 'TECNOLOGÍAS DE MANTENIMIENTO PREDICTIVO, PREVENTIVO Y CORRECTIVO', RED_DE_CONOCIMIENTO: 'Electrónica Y Automatización', APUESTAS_PRIORITARIAS: 'Fortalecimiento en programas TIC', FIC: 'NO' },
-      { COD_VER: '03000086-1', PRF_DENOMINACION: 'INNOVACION Y CREATIVIDAD', MODALIDAD: 'Virtual', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Complementaria virtual', PRF_DURACION_MAXIMA: 60, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'CLIENTE', RED_TECNOLOGICA: 'TECNOLOGÍAS DE GESTIÓN ADMINISTRATIVA Y SERVICIOS FINANCIEROS', RED_DE_CONOCIMIENTO: 'Red Ins. de Pedagogía', APUESTAS_PRIORITARIAS: 'Economía popular', FIC: 'NO' },
-      { COD_VER: '02000127-1', PRF_DENOMINACION: 'CURSO MODELO OMI 1.39 LIDERAZGO Y TRABAJO EN EQUIPO', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 20, PRF_EDAD_MIN_REQUERIDA: null, LINEA_TECNOLOGICA: 'CLIENTE', RED_TECNOLOGICA: 'LOGÍSTICA Y TRANSPORTE', RED_DE_CONOCIMIENTO: 'Transporte', APUESTAS_PRIORITARIAS: 'Apuesta del sector', FIC: 'NO' },
-      { COD_VER: '03000143-2', PRF_DENOMINACION: 'EMPRENDIMIENTO EN APICULTURA', MODALIDAD: 'Presencial', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Curso especial', PRF_DURACION_MAXIMA: 288, PRF_EDAD_MIN_REQUERIDA: 15, LINEA_TECNOLOGICA: 'PRODUCCIÓN Y TRANSFORMACIÓN', RED_TECNOLOGICA: 'TECNOLOGÍAS PECUARIAS', RED_DE_CONOCIMIENTO: 'Pecuaria', APUESTAS_PRIORITARIAS: 'Economía popular', FIC: 'NO' },
-      { COD_VER: 'distancia-01', PRF_DENOMINACION: 'FORMACION A DISTANCIA EN GESTION AMBIENTAL', MODALIDAD: 'A distancia', TIPO_DE_FORMACION: 'Complementaria', NIVEL_DE_FORMACION: 'Técnico', PRF_DURACION_MAXIMA: 880, PRF_EDAD_MIN_REQUERIDA: 18, LINEA_TECNOLOGICA: 'PRODUCCIÓN Y TRANSFORMACIÓN', RED_TECNOLOGICA: 'TECNOLOGÍAS AGRÍCOLAS', RED_DE_CONOCIMIENTO: 'Agrícola', APUESTAS_PRIORITARIAS: 'Transición energética', FIC: 'SI' },
-    ]
+const emit = defineEmits(['select-course'])
+
+const allCourses = ref([])
+const loading = ref(true)
+
+const loadCatalogo = async () => {
+  loading.value = true
+  try {
+    const response = await fetch('/catalogo.json?t=' + Date.now(), {
+      cache: 'no-cache',
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    })
+    const catalogo = await response.json()
+    allCourses.value = catalogo
+  } catch (error) {
+    console.error('Error cargando catálogo:', error)
+  } finally {
+    loading.value = false
   }
+}
+
+onMounted(async () => {
+  await loadCatalogo()
 })
 
-// ── Estado ──────────────────────────────────────
-const allCourses   = ref([...props.courses])
-const searchQuery  = ref('')
-const sortBy       = ref('nombre')
-const currentPage  = ref(1)
-const PER_PAGE     = 15
+const searchQuery = ref('')
+const sortBy = ref('nombre')
+const currentPage = ref(1)
+const PER_PAGE = 15
+const showModal = ref(false)
+const selectedCourse = ref(null)
 
 const selected = ref({
   modalidad: [],
-  nivel: [],
   linea: [],
   red: [],
   apuesta: [],
-  fic: [],
   durMin: null,
-  durMax: null,
+  durMax: null
 })
 
 const sortOptions = [
@@ -460,129 +377,166 @@ const sortOptions = [
   { label: 'Horas: mayor a menor', value: 'horas_desc' }
 ]
 
-// ── Helpers ──────────────────────────────────────
-function countBy(field, val) {
-  return allCourses.value.filter(c => c[field] === val).length
+const countBy = (campo, valor) => {
+  if (!allCourses.value?.length) return 0
+  return allCourses.value.filter(c => c[campo] === valor).length
 }
 
-// ── Filtros estáticos ────────────────────────────
-const filters = {
-  modalidad: [
-    { value: 'Presencial',  label: 'Presencial',  count: countBy('MODALIDAD', 'Presencial') },
-    { value: 'Virtual',     label: 'Virtual',     count: countBy('MODALIDAD', 'Virtual') },
-    { value: 'A distancia', label: 'A distancia', count: countBy('MODALIDAD', 'A distancia') },
-  ]
+const crearOpcionesFiltro = (campo) => {
+  if (!allCourses.value?.length) return []
+  const valoresUnicos = [...new Set(allCourses.value.map(c => c[campo]).filter(Boolean))]
+  return valoresUnicos.map(v => ({
+    value: v,
+    label: v.length > 40 ? v.slice(0, 38) + '…' : v,
+    count: countBy(campo, v)
+  }))
 }
 
-const niveles = [
-  { value: 'Complementaria virtual', label: 'Complementaria virtual', count: countBy('NIVEL_DE_FORMACION', 'Complementaria virtual') },
-  { value: 'Curso especial',         label: 'Curso especial',         count: countBy('NIVEL_DE_FORMACION', 'Curso especial') },
-  { value: 'Técnico',                label: 'Técnico',                count: countBy('NIVEL_DE_FORMACION', 'Técnico') },
-  { value: 'Tecnólogo',              label: 'Tecnólogo',              count: countBy('NIVEL_DE_FORMACION', 'Tecnólogo') },
-]
+const modalidades = computed(() => [
+  { value: 'Presencial', label: 'Presencial', count: countBy('MODALIDAD', 'Presencial') },
+  { value: 'Virtual', label: 'Virtual', count: countBy('MODALIDAD', 'Virtual') },
+  { value: 'Virtual/Presencial', label: 'Virtual/Presencial', count: countBy('MODALIDAD', 'Virtual/Presencial') },
+])
 
-const lineas = [...new Set(allCourses.value.map(c => c.LINEA_TECNOLOGICA).filter(Boolean))].map(v => ({
-  value: v,
-  label: v.length > 40 ? v.slice(0, 38) + '…' : v,
-  count: countBy('LINEA_TECNOLOGICA', v),
-}))
+const lineas = computed(() => crearOpcionesFiltro('LINEA_TECNOLOGICA'))
+const redes = computed(() => crearOpcionesFiltro('RED_DE_CONOCIMIENTO'))
+const apuestas = computed(() => crearOpcionesFiltro('APUESTAS_PRIORITARIAS'))
 
-const redes = [...new Set(allCourses.value.map(c => c.RED_DE_CONOCIMIENTO).filter(Boolean))].map(v => ({
-  value: v, label: v, count: countBy('RED_DE_CONOCIMIENTO', v),
-}))
-
-const apuestas = [...new Set(allCourses.value.map(c => c.APUESTAS_PRIORITARIAS).filter(Boolean))].map(v => ({
-  value: v, label: v, count: countBy('APUESTAS_PRIORITARIAS', v),
-}))
-
-const ficCount   = computed(() => allCourses.value.filter(c => c.FIC === 'SI').length)
-const noFicCount = computed(() => allCourses.value.filter(c => c.FIC === 'NO').length)
-
-// ── Cursos filtrados ─────────────────────────────
 const filteredCourses = computed(() => {
-  let list = allCourses.value
+  if (!allCourses.value?.length) return []
+  let resultado = allCourses.value
 
-  if (searchQuery.value.trim()) {
-    const q = searchQuery.value.toLowerCase()
-    list = list.filter(c =>
-      c.PRF_DENOMINACION.toLowerCase().includes(q) ||
-      (c.RED_DE_CONOCIMIENTO ?? '').toLowerCase().includes(q) ||
-      (c.LINEA_TECNOLOGICA ?? '').toLowerCase().includes(q)
+  if (searchQuery.value?.trim()) {
+    const texto = searchQuery.value.toLowerCase()
+    resultado = resultado.filter(c =>
+      (c.PRF_DENOMINACION || '').toLowerCase().includes(texto) ||
+      (c.RED_DE_CONOCIMIENTO || '').toLowerCase().includes(texto) ||
+      (c.LINEA_TECNOLOGICA || '').toLowerCase().includes(texto)
     )
   }
 
-  if (selected.value.modalidad.length) list = list.filter(c => selected.value.modalidad.includes(c.MODALIDAD))
-  if (selected.value.nivel.length)     list = list.filter(c => selected.value.nivel.includes(c.NIVEL_DE_FORMACION))
-  if (selected.value.linea.length)     list = list.filter(c => selected.value.linea.includes(c.LINEA_TECNOLOGICA))
-  if (selected.value.red.length)       list = list.filter(c => selected.value.red.includes(c.RED_DE_CONOCIMIENTO))
-  if (selected.value.apuesta.length)   list = list.filter(c => selected.value.apuesta.includes(c.APUESTAS_PRIORITARIAS))
-  if (selected.value.fic.length)       list = list.filter(c => selected.value.fic.includes(c.FIC))
+  if (selected.value?.modalidad?.length > 0) {
+    resultado = resultado.filter(c => selected.value.modalidad.includes(c.MODALIDAD))
+  }
 
-  if (selected.value.durMin != null && selected.value.durMin !== '')
-    list = list.filter(c => c.PRF_DURACION_MAXIMA >= selected.value.durMin)
-  if (selected.value.durMax != null && selected.value.durMax !== '')
-    list = list.filter(c => c.PRF_DURACION_MAXIMA <= selected.value.durMax)
+  if (selected.value?.linea?.length > 0) {
+    resultado = resultado.filter(c => selected.value.linea.includes(c.LINEA_TECNOLOGICA))
+  }
 
-  if (sortBy.value === 'nombre')      list = [...list].sort((a, b) => a.PRF_DENOMINACION.localeCompare(b.PRF_DENOMINACION))
-  else if (sortBy.value === 'horas_asc')  list = [...list].sort((a, b) => a.PRF_DURACION_MAXIMA - b.PRF_DURACION_MAXIMA)
-  else if (sortBy.value === 'horas_desc') list = [...list].sort((a, b) => b.PRF_DURACION_MAXIMA - a.PRF_DURACION_MAXIMA)
+  if (selected.value?.red?.length > 0) {
+    resultado = resultado.filter(c => selected.value.red.includes(c.RED_DE_CONOCIMIENTO))
+  }
 
-  return list
+  if (selected.value?.apuesta?.length > 0) {
+    resultado = resultado.filter(c => selected.value.apuesta.includes(c.APUESTAS_PRIORITARIAS))
+  }
+
+  if (selected.value?.durMin != null && selected.value.durMin !== '') {
+    resultado = resultado.filter(c => c.PRF_DURACION_MAXIMA >= selected.value.durMin)
+  }
+
+  if (selected.value?.durMax != null && selected.value.durMax !== '') {
+    resultado = resultado.filter(c => c.PRF_DURACION_MAXIMA <= selected.value.durMax)
+  }
+
+  if (sortBy.value === 'nombre') {
+    resultado = [...resultado].sort((a, b) => {
+      const nombreA = a.PRF_DENOMINACION || ''
+      const nombreB = b.PRF_DENOMINACION || ''
+      return nombreA.localeCompare(nombreB)
+    })
+  } else if (sortBy.value === 'horas_asc') {
+    resultado = [...resultado].sort((a, b) => a.PRF_DURACION_MAXIMA - b.PRF_DURACION_MAXIMA)
+  } else if (sortBy.value === 'horas_desc') {
+    resultado = [...resultado].sort((a, b) => b.PRF_DURACION_MAXIMA - a.PRF_DURACION_MAXIMA)
+  }
+
+  return resultado
 })
 
-// ── Paginación ───────────────────────────────────
-const totalPages = computed(() => Math.ceil(filteredCourses.value.length / PER_PAGE))
+const totalPages = computed(() => {
+  if (!filteredCourses.value) return 0
+  return Math.ceil(filteredCourses.value.length / PER_PAGE)
+})
 
 const paginatedCourses = computed(() => {
-  const start = (currentPage.value - 1) * PER_PAGE
-  return filteredCourses.value.slice(start, start + PER_PAGE)
+  if (!filteredCourses.value) return []
+  const inicio = (currentPage.value - 1) * PER_PAGE
+  const fin = inicio + PER_PAGE
+  return filteredCourses.value.slice(inicio, fin)
 })
 
-function goPage(p) {
-  if (p < 1 || p > totalPages.value) return
-  currentPage.value = p
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-// ── Acciones ─────────────────────────────────────
-function applyFilters() { currentPage.value = 1 }
-function onSearch()     { currentPage.value = 1 }
-
-function clearFilters() {
-  selected.value = { modalidad: [], nivel: [], linea: [], red: [], apuesta: [], fic: [], durMin: null, durMax: null }
+const clearFilters = () => {
+  selected.value = {
+    modalidad: [],
+    linea: [],
+    red: [],
+    apuesta: [],
+    durMin: null,
+    durMax: null
+  }
   searchQuery.value = ''
   currentPage.value = 1
 }
 
-// ── Chips activos ────────────────────────────────
+const abrirModal = (curso) => {
+  selectedCourse.value = curso
+  showModal.value = true
+}
+
+const cerrarModal = () => {
+  showModal.value = false
+  selectedCourse.value = null
+}
+
+const seleccionarCurso = () => {
+  if (selectedCourse.value) {
+    emit('select-course', { ...selectedCourse.value })
+    cerrarModal()
+  }
+}
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 const activeChips = computed(() => {
   const chips = []
-  selected.value.modalidad.forEach(v => chips.push({ key: 'modalidad', value: v, label: 'Modalidad: ' + v }))
-  selected.value.nivel.forEach(v    => chips.push({ key: 'nivel',     value: v, label: 'Nivel: ' + v }))
-  selected.value.linea.forEach(v    => chips.push({ key: 'linea',     value: v, label: 'Línea: ' + v.slice(0, 20) + '…' }))
-  selected.value.red.forEach(v      => chips.push({ key: 'red',       value: v, label: 'Red: ' + v }))
-  selected.value.apuesta.forEach(v  => chips.push({ key: 'apuesta',   value: v, label: 'Apuesta: ' + v }))
-  selected.value.fic.forEach(v      => chips.push({ key: 'fic',       value: v, label: 'FIC: ' + v }))
+  if (selected.value?.modalidad) {
+    selected.value.modalidad.forEach(v => chips.push({ key: 'modalidad', value: v, label: 'Modalidad: ' + v }))
+  }
+  if (selected.value?.linea) {
+    selected.value.linea.forEach(v => chips.push({ key: 'linea', value: v, label: 'Línea: ' + v.slice(0, 20) + '…' }))
+  }
+  if (selected.value?.red) {
+    selected.value.red.forEach(v => chips.push({ key: 'red', value: v, label: 'Red: ' + v }))
+  }
+  if (selected.value?.apuesta) {
+    selected.value.apuesta.forEach(v => chips.push({ key: 'apuesta', value: v, label: 'Apuesta: ' + v }))
+  }
   return chips
 })
 
-function removeChip(chip) {
-  const arr = selected.value[chip.key]
-  const idx = arr.indexOf(chip.value)
-  if (idx > -1) arr.splice(idx, 1)
-  applyFilters()
+const removeChip = (chip) => {
+  const lista = selected.value?.[chip.key]
+  if (!lista) return
+  const indice = lista.indexOf(chip.value)
+  if (indice > -1) {
+    lista.splice(indice, 1)
+  }
 }
 
-// ── Navegación a detalle del curso ──────────────
-function goToCourse(course) {
-  console.log('Navegar a detalle del curso:', course.COD_VER)
-}
+watch([searchQuery, sortBy, selected], () => {
+  currentPage.value = 1
+}, { deep: true })
 </script>
 
 <style scoped>
-/* Barra de búsqueda */
+.q-page {
+  padding: 20px 0 0 0;
+}
+
 .search-wrapper {
-  background: linear-gradient(135deg, var(--color_button) 0%, var(--color_card) 100%);
   padding: 20px 32px;
   display: flex;
   align-items: center;
@@ -595,10 +549,10 @@ function goToCourse(course) {
   background: #ffffff;
   border-radius: 50px;
   width: 100%;
-  max-width: 700px;
+  max-width: 1500px;
   height: 52px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .search-section {
@@ -658,38 +612,191 @@ function goToCourse(course) {
   font-size: 20px;
 }
 
-/* Layout principal */
 .main-layout {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   align-items: flex-start;
+  max-width: 100%;
+  min-height: calc(100vh - 120px);
+  padding: 0px !important;
 }
 
-/* Cards de cursos */
+.sidebar-container {
+  flex: 0 0 320px;
+  min-height: calc(100vh - 200px);
+}
+
+.sidebar-container .q-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-container .q-card-section:first-of-type {
+  flex-shrink: 0;
+}
+
+.sidebar-container .q-card-section:nth-of-type(2) {
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(100vh - 350px);
+}
+
+.sidebar-container .q-card-section:nth-of-type(2)::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-container .q-card-section:nth-of-type(2)::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.sidebar-container .q-card-section:nth-of-type(2)::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.sidebar-container .q-card-section:nth-of-type(2)::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.sidebar-container .q-card-actions {
+  flex-shrink: 0;
+}
+
+.results-container {
+  flex: 1;
+  min-width: 0;
+  min-height: calc(100vh - 200px);
+}
+
+.results-container .q-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.results-container .q-card-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .course-card {
   transition: box-shadow 0.2s, transform 0.15s;
   border-left: 4px solid transparent;
+  min-height: 120px;
 }
 
 .course-card:hover {
+  color: white !important;
   box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
   transform: translateX(4px);
   border-left-color: var(--color_button);
+  background: linear-gradient(135deg, #2e7d32 0%, #3fa34d 50%, #66bb6a 100%);
+}
+
+.course-card:hover .course-title,
+.course-card:hover .text-subtitle1,
+.course-card:hover .text-weight-bold,
+.course-card:hover .text-body2,
+.course-card:hover .text-grey-7 {
+  color: white !important;
+}
+
+.course-card:hover .q-icon {
+  color: white !important;
+}
+
+.modalidad-badge {
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  transition: all 0.2s ease;
+}
+
+.badge-presencial {
+  background: linear-gradient(135deg, #2e7d32, #43a047);
+  color: white;
+}
+
+.badge-virtual {
+  background: linear-gradient(135deg, #1565c0, #42a5f5);
+  color: white;
+}
+
+.badge-mixto {
+  background: linear-gradient(135deg, #6d4c41, #8d6e63);
+  color: white;
+}
+
+.badge-default {
+  background: linear-gradient(135deg, #616161, #757575);
+  color: white;
+}
+
+.course-card:hover .modalidad-badge {
+  background: linear-gradient(135deg, #ffffff, #f5f5f5) !important;
+  color: #2e7d32 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.course-card .q-card-section {
+  display: flex;
+  align-items: center;
+  min-height: 120px;
 }
 
 .course-title {
   color: var(--color_button);
 }
 
-.course-arrow {
-  transition: transform 0.2s;
+.results-scroll-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
 }
 
-.course-card:hover .course-arrow {
-  transform: translateX(4px);
+.courses-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+  min-height: 0;
 }
 
-/* Paginación */
+.courses-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.courses-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.courses-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.courses-list::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.pagination-container {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.results-container .q-card-section>div:first-child,
+.results-container .q-card-section>div:nth-child(2) {
+  flex-shrink: 0;
+}
+
 :deep(.q-pagination) button {
   min-width: 40px;
   height: 40px;
@@ -700,20 +807,202 @@ function goToCourse(course) {
   border: 1.5px solid #ddd;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .main-layout {
     flex-direction: column;
+    gap: 16px;
+    padding: 16px;
   }
+
   .sidebar-container {
     flex: 1;
     width: 100%;
+    min-height: auto;
+  }
+
+  .sidebar-container .q-card-section:nth-of-type(2) {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .results-container {
+    min-height: auto;
+  }
+
+  .results-scroll-container {
+    min-height: auto;
+  }
+
+  .courses-list {
+    overflow-y: visible;
+  }
+
+  .pagination-container {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .search-wrapper {
+    padding: 16px;
+  }
+
+  .search-bar {
+    height: 48px;
+  }
+
+  .search-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  .course-card {
+    min-height: auto;
+  }
+
+  .course-card .q-card-section {
+    min-height: auto;
   }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 1200px) {
+  .main-layout {
+    gap: 16px;
+    padding: 16px;
+  }
+
   .sidebar-container {
-    flex: 0 0 320px;
+    flex: 0 0 280px;
+  }
+}
+
+@media (min-width: 1201px) {
+  .main-layout {
+    gap: 24px;
+    padding: 24px 32px;
+  }
+}
+
+.scroll-to-top-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px auto 30px auto;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, var(--color_button) 0%, var(--color_card) 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
+  transition: all 0.3s ease;
+}
+
+.scroll-to-top-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.scroll-to-top-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(46, 125, 50, 0.45);
+}
+
+.scroll-to-top-btn:hover svg {
+  transform: translateY(-2px);
+}
+
+.scroll-to-top-btn:active {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .scroll-to-top-btn {
+    margin: 15px auto 25px auto;
+    padding: 12px 22px;
+    font-size: 14px;
+  }
+
+  .scroll-to-top-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.info-section {
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid var(--color_button);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.info-content {
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+/* Modal de detalles */
+.modal-card {
+  width: 100%;
+  max-width: 600px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-card > .q-card-section:first-child {
+  flex-shrink: 0;
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 24px;
+  min-height: 100px;
+  max-height: calc(85vh - 100px);
+}
+
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.modal-card > .q-card-actions {
+  flex-shrink: 0;
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .modal-card {
+    max-width: 550px;
+  }
+}
+
+@media (min-width: 1201px) {
+  .modal-card {
+    max-width: 650px;
   }
 }
 </style>

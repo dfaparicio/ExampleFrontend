@@ -161,20 +161,39 @@
                     <table class="req-table">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Requisito</th>
+                                <th style="width:50px;">#</th>
+                                <th style="width:250px;">Requisito</th>
                                 <th>Descripción / Observación</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td style="text-align:center;color:#A0AEC0;font-size:13px;" colspan="3">
-                                    Los requisitos de ingreso se cargarán automáticamente al ingresar el código del
-                                    curso.
+                            <tr v-for="(req, index) in formData.requisitos" :key="index">
+                                <td style="text-align:center;font-weight:600;color:#718096;">{{ index + 1 }}</td>
+                                <td>
+                                    <q-input v-model="req.nombre" dense outlined placeholder="Ej: Académico" 
+                                        bg-color="grey-1" color="green-9" input-style="font-weight:500;" />
+                                </td>
+                                <td>
+                                    <q-input v-model="req.observacion" dense outlined type="textarea" autogrow
+                                        placeholder="Detalle del requisito..." bg-color="white" color="green-9" />
+                                </td>
+                                <td style="text-align:center;">
+                                    <q-btn flat round dense icon="delete" color="red-4" size="sm" @click="eliminarRequisito(index)" />
+                                </td>
+                            </tr>
+                            <tr v-if="formData.requisitos.length === 0">
+                                <td style="text-align:center;color:#A0AEC0;font-size:13px;padding: 20px;" colspan="4">
+                                    No hay requisitos cargados. Selecciona un curso del catálogo o añade uno nuevo.
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+                    
+                    <!-- Botón para agregar más requisitos -->
+                    <div class="flex justify-center q-mt-md">
+                        <q-btn outline color="green-9" icon="add_circle" label="Añadir otro requisito" 
+                            @click="agregarRequisitoManual" class="full-width" style="border-style: dashed;" />
+                    </div>
                     <div class="req-note">
                         <q-icon name="info" size="16px" color="warning" />
                         <span>Según diseño curricular del programa. Validar idoneidad del instructor conforme a la
@@ -352,7 +371,8 @@ const getInitialForm = () => ({
     direccionCurso: '', tipoProg: 'ATENCION_INSTITUCIONES', idCampesena: '',
     nombreEmpresa: '', nit: '', contactoNombre: '', contactoTel: '',
     tipoPoblacion: null, nombreInstructor: '', cedulaInstructor: '', telInstructor: '',
-    correoInstructor: '', nombreSupervisor: '', nombreAmbiente: '', dirAmbiente: ''
+    correoInstructor: '', nombreSupervisor: '', nombreAmbiente: '', dirAmbiente: '',
+    requisitos: []
 })
 
 const formData = ref(getInitialForm())
@@ -378,6 +398,15 @@ const agregarSesion = () => {
     if (sesiones.value.length < maxSesiones) {
         sesiones.value.push({ id: sessionCounterId++, fecha: '', inicio: '', fin: '' })
     }
+}
+
+// --- LÓGICA DE REQUISITOS ---
+const agregarRequisitoManual = () => {
+    formData.value.requisitos.push({ nombre: 'Otro requisito', observacion: '' })
+}
+
+const eliminarRequisito = (index) => {
+    formData.value.requisitos.splice(index, 1)
 }
 
 const eliminarSesion = (index) => {
@@ -422,9 +451,44 @@ const guardarFormulario = () => {
     console.log('Datos actuales:', formData.value, sesiones.value)
     alert('Maquetado listo. Botón guardar presionado.')
 }
+
+// --- FUNCIÓN PARA AUTOCOMPLETAR DESDE EL CATÁLOGO ---
+const fillFromCatalogo = (course) => {
+    if (!course) return
+    
+    formData.value.codigoCurso = course.COD_VER || ''
+    formData.value.nombreCurso = course.PRF_DENOMINACION || ''
+    formData.value.duracionHoras = Number(course.PRF_DURACION_MAXIMA) || null
+    
+    // Extraer versión
+    const versionMatch = course.COD_VER?.match(/V(\d+)/i)
+    formData.value.version = versionMatch ? versionMatch[1] : '1'
+
+    // Procesar Requisitos: El contenido va a la columna OBSERVACIÓN
+    if (course.PRF_DESCRIPCION_REQUISITO) {
+        const lineas = course.PRF_DESCRIPCION_REQUISITO.split(/\n||\t/).filter(l => l.trim().length > 2)
+        
+        formData.value.requisitos = lineas.map(texto => ({
+            nombre: 'Requisito de ingreso', 
+            observacion: texto.trim().replace(/^[\s\u2022\u00b7\u25cf\u25cb\u25aa\u25ab\u25b6\u27a2\u27a4\u27b2\u27b5\u27b8\u27ba\u27bc\u27be\u27c0\u27c2\u27c4\u27c6\u27c8\u27ca\u27cc\u27ce\u27d0\u27d2\u27d4\u27d6\u27d8\u27da\u27dc\u27de\u27e0\u27e2\u27e4\u27e6\u27e8\u27ea\u27ec\u27ee\u27f0\u27f2\u27f4\u27f6\u27f8\u27fa\u27fc\u27fe\u2800]+/, '').trim()
+        }))
+    } else {
+        formData.value.requisitos = [{ nombre: 'Requisito General', observacion: 'Sin requisitos específicos en catálogo' }]
+    }
+    
+    console.log('Formulario actualizado con datos de:', course.PRF_DENOMINACION)
+}
+
+defineExpose({
+    fillFromCatalogo
+})
 </script>
 
 <style scoped>
+.sena-page {
+    padding: 20px 0 0 0;
+}
+
 :root {
     --sena-green: #00703C;
     --sena-green-dark: #004D2A;
@@ -503,8 +567,9 @@ const guardarFormulario = () => {
 }
 
 .form-container {
-    max-width: 1500px;
-    padding: 40px 0 40px 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 40px 20px 40px 20px;
 }
 
 .fecha-bar {
@@ -518,6 +583,7 @@ const guardarFormulario = () => {
     padding: 14px 24px;
     margin-bottom: 20px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
 }
 
 .fecha-bar label {
@@ -533,6 +599,7 @@ const guardarFormulario = () => {
     margin-bottom: 20px;
     overflow: hidden;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    width: 100%;
 }
 
 .section-header {
@@ -817,6 +884,20 @@ const guardarFormulario = () => {
     gap: 12px;
     justify-content: flex-end;
     padding: 24px 0 0;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* Para pantallas muy grandes, limitar el ancho del contenido para mejor legibilidad */
+@media (min-width: 1600px) {
+    .form-container {
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    .section-card {
+        max-width: 100%;
+    }
 }
 
 .btn {
@@ -843,6 +924,13 @@ const guardarFormulario = () => {
 }
 
 @media (max-width: 768px) {
+    .sena-page {
+        padding: 10px 0 0 0;
+    }
+
+    .form-container {
+        padding: 20px 10px 20px 10px;
+    }
 
     .col-2,
     .col-3,
@@ -863,6 +951,18 @@ const guardarFormulario = () => {
 
     .header-inner {
         flex-wrap: wrap;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .form-container {
+        padding: 30px 15px 30px 15px;
+    }
+}
+
+@media (min-width: 1201px) {
+    .form-container {
+        padding: 40px 20px 40px 20px;
     }
 }
 
